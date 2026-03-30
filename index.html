@@ -329,7 +329,7 @@ function renderAll() {
         item.querySelector(".counter span").textContent = count;
         repairBadge.style.display = needsRepair ? "inline" : "none";
 
-        if (price && count > 0) {
+        if (price) {
             priceBadge.textContent = "~" + price + " €";
             priceBadge.style.display = "inline";
         } else {
