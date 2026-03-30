@@ -1,0 +1,76 @@
+const FIREBASE_URL = "";
+const EBAY_CLIENT_ID = "";
+const EBAY_CLIENT_SECRET = "";
+
+const CONSOLES = {
+  gbasp:     "Game Boy Advance SP",
+  ds:        "Nintendo DS Phat",
+  dsl:       "Nintendo DS Lite",
+  dsi:       "Nintendo DSi",
+  dsixl:     "Nintendo DSi XL",
+  "3ds":     "Nintendo 3DS",
+  n2dsxl:    "New Nintendo 2DS XL",
+  n3ds:      "New Nintendo 3DS",
+  n3dsxl:    "New Nintendo 3DS XL",
+  wiif:      "Nintendo Wii Family Edition",
+  wiiu:      "Nintendo Wii U",
+  switch:    "Nintendo Switch",
+  ps2:       "PlayStation 2 Konsole",
+  ps3s:      "PlayStation 3 Slim",
+  ps3ss:     "PlayStation 3 Super Slim",
+  ps4s:      "PlayStation 4 Slim",
+  ps5s:      "PlayStation 5 Slim",
+  psp2:      "PSP 2000",
+  psp3:      "PSP 3000",
+  pspstreet: "PSP Street E1000",
+  vita2:     "PS Vita 2000",
+  one:       "Xbox One Konsole",
+  seriess:   "Xbox Series S"
+};
+
+function getEbayToken() {
+  const credentials = Utilities.base64Encode(EBAY_CLIENT_ID + ":" + EBAY_CLIENT_SECRET);
+  const response = UrlFetchApp.fetch("https://api.ebay.com/identity/v1/oauth2/token", {
+    method: "post",
+    headers: { "Authorization": "Basic " + credentials, "Content-Type": "application/x-www-form-urlencoded" },
+    payload: "grant_type=client_credentials&scope=https%3A%2F%2Fapi.ebay.com%2Foauth%2Fapi_scope"
+  });
+  return JSON.parse(response.getContentText()).access_token;
+}
+
+function fetchMedianPrice(token, query) {
+  const q = encodeURIComponent(query + " gebraucht");
+  const url = `https://api.ebay.com/buy/browse/v1/item_summary/search?q=${q}&filter=conditionIds%3A%7B3000%7C2500%7D,deliveryCountry%3ADE,priceCurrency%3AEUR&limit=10`;
+  try {
+    const response = UrlFetchApp.fetch(url, {
+      headers: {
+        "Authorization": "Bearer " + token,
+        "X-EBAY-C-MARKETPLACE-ID": "EBAY_DE"
+      }
+    });
+    const items = JSON.parse(response.getContentText()).itemSummaries || [];
+    const prices = items.map(i => parseFloat(i.price?.value)).filter(p => p > 5 && p < 2000);
+    if (!prices.length) return null;
+    prices.sort((a, b) => a - b);
+    const mid = Math.floor(prices.length / 2);
+    return Math.round(prices.length % 2 ? prices[mid] : (prices[mid-1] + prices[mid]) / 2);
+  } catch(e) { return null; }
+}
+
+function updatePrices() {
+  const token = getEbayToken();
+  const updates = { _lastUpdated: new Date().toISOString() };
+
+  for (const [id, query] of Object.entries(CONSOLES)) {
+    const price = fetchMedianPrice(token, query);
+    if (price) { updates[id] = price; Logger.log(id + ": " + price + " €"); }
+    Utilities.sleep(300);
+  }
+
+  UrlFetchApp.fetch(FIREBASE_URL + "/marketPrices.json", {
+    method: "patch",
+    contentType: "application/json",
+    payload: JSON.stringify(updates)
+  });
+  Logger.log("Fertig! " + Object.keys(updates).length + " Preise gespeichert.");
+}
