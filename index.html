@@ -21,78 +21,105 @@
 body { margin:0; font-family: "Segoe UI", system-ui, sans-serif; background: linear-gradient(135deg,#0f1220,#1a1f3a); color: var(--text); }
 header { padding: 40px 20px; text-align: center; }
 header h1 { font-size: 2.5rem; margin-bottom:10px; }
-header p { color: var(--muted); }
+
 .stats { margin-top:15px; font-size:1.1rem; display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
 .stats span { display:flex; align-items:center; gap:6px; }
-.dot-owned { width:10px; height:10px; border-radius:50%; background:var(--owned); display:inline-block; }
+.dot-owned  { width:10px; height:10px; border-radius:50%; background:var(--owned);  display:inline-block; }
 .dot-repair { width:10px; height:10px; border-radius:50%; background:var(--repair); display:inline-block; }
+
+.value-box {
+    margin: 18px auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(167,139,250,0.1);
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 1.05rem;
+}
+.value-box strong { color: #a78bfa; font-size: 1.3rem; }
+.value-box small  { color: var(--muted); font-size: 0.75rem; display:block; margin-top:2px; }
+
 .controls { margin:25px auto; display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
 .controls input, .controls select { background: var(--card); border:none; color:var(--text); padding:10px 14px; border-radius:10px; font-size:0.9rem; outline:none; }
 .controls input { width:220px; }
+
 section { max-width:98%; margin:auto; padding:10px 12px; }
 .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
-.card { background: var(--card); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.35);}
+.card { background: var(--card); border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.35); }
 .card h2 { font-size:1.3rem; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:10px; }
 ul { list-style:none; padding:0; margin:0; }
 li { padding:6px 0; display:flex; justify-content:space-between; align-items:center; }
-li.owned { color:var(--owned); font-weight:600; }
+li.owned  { color:var(--owned);  font-weight:600; }
 li.repair { color:var(--repair); font-weight:600; }
 
-/* Reparatur-Badge */
+.market-price {
+    font-size: 0.72rem;
+    color: #a78bfa;
+    background: rgba(167,139,250,0.1);
+    border: 1px solid rgba(167,139,250,0.25);
+    border-radius: 5px;
+    padding: 1px 5px;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
 .repair-badge {
-    font-size:0.75rem;
-    font-weight:800;
+    font-size: 0.75rem;
+    font-weight: 800;
     color: var(--repair);
     background: rgba(255,140,0,0.15);
     border: 1px solid rgba(255,140,0,0.4);
-    border-radius:5px;
-    padding:1px 5px;
-    margin-right:6px;
-    letter-spacing:0.05em;
+    border-radius: 5px;
+    padding: 1px 5px;
+    margin-right: 6px;
+    letter-spacing: 0.05em;
 }
 
 .counter { display:flex; gap:6px; align-items:center; }
 .counter button { background: var(--accent); border:none; color:#fff; width:26px; height:26px; border-radius:50%; cursor:pointer; font-weight:bold; }
 .counter span { min-width:18px; text-align:center; }
 
-/* Reparatur-Knopf (nur im Admin-Modus) */
 .btn-repair {
     background: transparent !important;
     border: 1px solid rgba(255,140,0,0.5) !important;
     color: var(--repair) !important;
-    font-size:0.75rem !important;
-    width:26px !important;
-    height:26px !important;
-    border-radius:6px !important;
-    cursor:pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    font-size: 0.75rem !important;
+    width: 26px !important;
+    height: 26px !important;
+    border-radius: 6px !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s;
 }
-.btn-repair.active {
-    background: rgba(255,140,0,0.25) !important;
-    border-color: var(--repair) !important;
-}
-.btn-repair:hover { background: rgba(255,140,0,0.15) !important; }
+.btn-repair.active { background: rgba(255,140,0,0.25) !important; border-color: var(--repair) !important; }
+.btn-repair:hover  { background: rgba(255,140,0,0.15) !important; }
 
-footer { text-align:center; padding:30px; color:var(--muted);}
+footer { text-align:center; padding:30px; color:var(--muted); }
 #loginForm { display:flex; flex-direction:column; gap:10px; justify-content:center; align-items:center; margin:20px auto; max-width:200px; }
 #loginForm input { width:200px; text-align:center; }
 #loginForm button { background: var(--accent); border:none; color:#fff; padding:8px 16px; border-radius:10px; cursor:pointer; }
 </style>
-
 </head>
 
 <body>
 
 <header>
 <h1>Konsolen-Sammlung</h1>
-<p></p>
 
 <div class="stats">
     <span><span class="dot-owned"></span><span id="ownedCount">0</span> / <span id="totalCount">0</span> im Besitz</span>
     <span><span class="dot-repair"></span><span id="repairCount">0</span> zur Reparatur</span>
+</div>
+
+<div class="value-box">
+    <div>
+        <strong id="totalValue">—</strong> aktueller Gesamtwert
+        <small id="lastUpdated"></small>
+    </div>
 </div>
 
 <div class="controls">
@@ -108,52 +135,7 @@ footer { text-align:center; padding:30px; color:var(--muted);}
 
 <section class="grid">
 
-<!-- Nintendo Heimkonsolen -->
-
-<div class="card">
-<h2>Nintendo – Heimkonsolen</h2>
-<ul>
-<li data-id="nes">NES</li>
-<li data-id="snes">SNES</li>
-<li data-id="n64">Nintendo 64</li>
-<li data-id="gc">GameCube</li>
-<li data-id="wii">Wii</li>
-<li data-id="wiif">Wii Family Edition</li>
-<li data-id="wiim">Wii Mini</li>
-<li data-id="wiiu">Wii U</li>
-<li data-id="switch">Switch</li>
-<li data-id="switchl">Switch Lite</li>
-<li data-id="switcho">Switch OLED</li>
-<li data-id="switch2">Switch 2</li>
-</ul>
-</div>
-
-<!-- Nintendo Handhelds -->
-
-<div class="card">
-<h2>Nintendo – Handhelds</h2>
-<ul>
-<li data-id="gb">Game Boy</li>
-<li data-id="gbp">Game Boy Pocket</li>
-<li data-id="gbc">Game Boy Color</li>
-<li data-id="gba">Game Boy Advance</li>
-<li data-id="gbasp">GBA SP</li>
-<li data-id="gbamacro">Game Boy Macro</li>
-<li data-id="ds">DS</li>
-<li data-id="dsl">DS Lite</li>
-<li data-id="dsi">DSi</li>
-<li data-id="dsixl">DSi XL</li>
-<li data-id="3ds">3DS</li>
-<li data-id="3dsxl">3DS XL</li>
-<li data-id="2ds">2DS</li>
-<li data-id="n2dsxl">New 2DS XL</li>
-<li data-id="n3ds">New 3DS</li>
-<li data-id="n3dsxl">New 3DS XL</li>
-</ul>
-</div>
-
 <!-- PlayStation Heimkonsolen -->
-
 <div class="card">
 <h2>PlayStation – Heimkonsolen</h2>
 <ul>
@@ -176,7 +158,6 @@ footer { text-align:center; padding:30px; color:var(--muted);}
 </div>
 
 <!-- PlayStation Handhelds -->
-
 <div class="card">
 <h2>PlayStation – Handhelds</h2>
 <ul>
@@ -192,7 +173,6 @@ footer { text-align:center; padding:30px; color:var(--muted);}
 </div>
 
 <!-- Xbox -->
-
 <div class="card">
 <h2>Xbox</h2>
 <ul>
@@ -208,10 +188,50 @@ footer { text-align:center; padding:30px; color:var(--muted);}
 </ul>
 </div>
 
+<!-- Nintendo Heimkonsolen -->
+<div class="card">
+<h2>Nintendo – Heimkonsolen</h2>
+<ul>
+<li data-id="nes">NES</li>
+<li data-id="snes">SNES</li>
+<li data-id="n64">Nintendo 64</li>
+<li data-id="gc">GameCube</li>
+<li data-id="wii">Wii</li>
+<li data-id="wiif">Wii Family Edition</li>
+<li data-id="wiim">Wii Mini</li>
+<li data-id="wiiu">Wii U</li>
+<li data-id="switch">Switch</li>
+<li data-id="switchl">Switch Lite</li>
+<li data-id="switcho">Switch OLED</li>
+<li data-id="switch2">Switch 2</li>
+</ul>
+</div>
+
+<!-- Nintendo Handhelds -->
+<div class="card">
+<h2>Nintendo – Handhelds</h2>
+<ul>
+<li data-id="gb">Game Boy</li>
+<li data-id="gbp">Game Boy Pocket</li>
+<li data-id="gbc">Game Boy Color</li>
+<li data-id="gba">Game Boy Advance</li>
+<li data-id="gbasp">GBA SP</li>
+<li data-id="ds">DS</li>
+<li data-id="dsl">DS Lite</li>
+<li data-id="dsi">DSi</li>
+<li data-id="dsixl">DSi XL</li>
+<li data-id="3ds">3DS</li>
+<li data-id="3dsxl">3DS XL</li>
+<li data-id="2ds">2DS</li>
+<li data-id="n2dsxl">New 2DS XL</li>
+<li data-id="n3ds">New 3DS</li>
+<li data-id="n3dsxl">New 3DS XL</li>
+</ul>
+</div>
+
 </section>
 
-<!-- Admin Login unten -->
-
+<!-- Admin Login -->
 <div id="loginForm">
 <input type="email" id="email" placeholder="E-Mail (Admin)">
 <input type="password" id="password" placeholder="Passwort">
@@ -221,11 +241,8 @@ footer { text-align:center; padding:30px; color:var(--muted);}
 <footer></footer>
 
 <!-- Firebase -->
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
 <script>
@@ -239,41 +256,28 @@ const firebaseConfig = {
   appId: "1:912970091926:web:2e8a14bc0c1949905fa1b7"
 };
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db   = firebase.database();
 const auth = firebase.auth();
 
-const items = document.querySelectorAll("li[data-id]");
-const ownedEl   = document.getElementById("ownedCount");
-const repairEl  = document.getElementById("repairCount");
-const totalEl   = document.getElementById("totalCount");
-const search    = document.getElementById("search");
-const filter    = document.getElementById("filter");
-const loginForm = document.getElementById("loginForm");
-const loginBtn  = document.getElementById("loginBtn");
+const items      = document.querySelectorAll("li[data-id]");
+const ownedEl    = document.getElementById("ownedCount");
+const repairEl   = document.getElementById("repairCount");
+const totalEl    = document.getElementById("totalCount");
+const totalValEl = document.getElementById("totalValue");
+const lastUpdEl  = document.getElementById("lastUpdated");
+const search     = document.getElementById("search");
+const filter     = document.getElementById("filter");
+const loginForm  = document.getElementById("loginForm");
+const loginBtn   = document.getElementById("loginBtn");
 const emailInput = document.getElementById("email");
 const passInput  = document.getElementById("password");
 
 totalEl.textContent = items.length;
 
-// Globaler State
 let countsData = {};
 let repairData = {};
+let pricesData = {};
 
-// Beide Datenbankknoten beobachten
-db.ref("marketPrices").on("value", snap => {
-    const prices = snap.val() || {};
-    document.querySelectorAll("li[data-id]").forEach(item => {
-        const price = prices[item.dataset.id];
-        let badge = item.querySelector(".market-price");
-        if (!badge) {
-            badge = document.createElement("span");
-            badge.className = "market-price";
-            badge.style.cssText = "font-size:0.75rem;color:#9aa0b3;margin-left:6px;";
-            item.querySelector(".counter").before(badge);
-        }
-        badge.textContent = price ? price + " €" : "";
-    });
-});
 db.ref("counts").on("value", snap => {
     countsData = snap.val() || {};
     renderAll();
@@ -282,17 +286,22 @@ db.ref("repair").on("value", snap => {
     repairData = snap.val() || {};
     renderAll();
 });
+db.ref("marketPrices").on("value", snap => {
+    pricesData = snap.val() || {};
+    if (pricesData._lastUpdated) {
+        const d = new Date(pricesData._lastUpdated);
+        lastUpdEl.textContent = "Stand: " + d.toLocaleDateString("de-DE");
+    }
+    renderAll();
+});
 
 function renderAll() {
     items.forEach(item => {
-        const id    = item.dataset.id;
-        const count = countsData[id] !== undefined ? countsData[id] : 0;
+        const id          = item.dataset.id;
+        const count       = countsData[id] !== undefined ? countsData[id] : 0;
         const needsRepair = !!repairData[id];
+        const price       = pricesData[id] || null;
 
-        // Konsolenname (erster Textknoten)
-        const nameNode = item.childNodes[0];
-
-        // Counter-Div anlegen falls noch nicht da
         let counter = item.querySelector(".counter");
         if (!counter) {
             counter = document.createElement("div");
@@ -302,23 +311,31 @@ function renderAll() {
             item.appendChild(counter);
         }
 
-        // Reparatur-Badge anlegen falls noch nicht da
-        let badge = item.querySelector(".repair-badge");
-        if (!badge) {
-            badge = document.createElement("span");
-            badge.className = "repair-badge";
-            badge.textContent = "✕";
-            // Badge direkt vor den Counter einfügen
-            item.insertBefore(badge, counter);
+        let repairBadge = item.querySelector(".repair-badge");
+        if (!repairBadge) {
+            repairBadge = document.createElement("span");
+            repairBadge.className = "repair-badge";
+            repairBadge.textContent = "✕";
+            item.insertBefore(repairBadge, counter);
         }
 
-        // Zähler aktualisieren
+        let priceBadge = item.querySelector(".market-price");
+        if (!priceBadge) {
+            priceBadge = document.createElement("span");
+            priceBadge.className = "market-price";
+            item.insertBefore(priceBadge, counter);
+        }
+
         item.querySelector(".counter span").textContent = count;
+        repairBadge.style.display = needsRepair ? "inline" : "none";
 
-        // Badge sichtbar / unsichtbar
-        badge.style.display = needsRepair ? "inline" : "none";
+        if (price && count > 0) {
+            priceBadge.textContent = "~" + price + " €";
+            priceBadge.style.display = "inline";
+        } else {
+            priceBadge.style.display = "none";
+        }
 
-        // CSS-Klassen
         item.classList.toggle("owned",  count > 0 && !needsRepair);
         item.classList.toggle("repair", needsRepair);
     });
@@ -326,18 +343,23 @@ function renderAll() {
 }
 
 function updateStats() {
-    let owned = 0, repair = 0;
+    let owned = 0, repair = 0, totalValue = 0;
     items.forEach(i => {
-        const count = parseInt(i.querySelector(".counter span")?.textContent || "0");
+        const id       = i.dataset.id;
+        const count    = parseInt(i.querySelector(".counter span")?.textContent || "0");
         const isRepair = i.classList.contains("repair");
+        const price    = pricesData[id] || 0;
+
         if (isRepair) repair++;
         else if (count > 0) owned++;
+
+        if (count > 0 && price) totalValue += price * count;
     });
     ownedEl.textContent  = owned;
     repairEl.textContent = repair;
+    totalValEl.textContent = totalValue > 0 ? "~" + totalValue.toLocaleString("de-DE") + " €" : "—";
 }
 
-// Suche + Filter
 function applyFilters() {
     const q = search.value.toLowerCase();
     const f = filter.value;
@@ -352,33 +374,28 @@ function applyFilters() {
         i.style.display = show ? "flex" : "none";
     });
 }
-search.oninput   = applyFilters;
-filter.onchange  = applyFilters;
+search.oninput  = applyFilters;
+filter.onchange = applyFilters;
 
-// Admin Login
 loginBtn.onclick = () => {
     auth.signInWithEmailAndPassword(emailInput.value, passInput.value)
     .then(() => {
-        alert("Login erfolgreich! Du kannst jetzt Änderungen speichern.");
         loginForm.style.display = "none";
         enableEditing();
     })
     .catch(err => alert("Fehler: " + err.message));
 };
 
-// Admin-Modus: Bearbeiten aktivieren
 function enableEditing() {
     items.forEach(item => {
-        const id = item.dataset.id;
+        const id      = item.dataset.id;
         const counter = item.querySelector(".counter");
 
-        // +/- Knöpfe
         const minus = document.createElement("button"); minus.textContent = "−";
         const plus  = document.createElement("button"); plus.textContent  = "+";
         counter.insertBefore(minus, counter.firstChild);
         counter.appendChild(plus);
 
-        // Reparatur-Knopf (🔧)
         const repairBtn = document.createElement("button");
         repairBtn.className = "btn-repair";
         repairBtn.title = "Zur Reparatur markieren";
@@ -395,7 +412,7 @@ function enableEditing() {
             const span = item.querySelector(".counter span");
             let c = parseInt(span.textContent) || 0;
             if (c > 0) { c--; span.textContent = c; }
-            item.classList.toggle("owned",  c > 0 && !repairData[id]);
+            item.classList.toggle("owned", c > 0 && !repairData[id]);
             updateStats();
             saveCount();
         };
@@ -404,20 +421,18 @@ function enableEditing() {
             const span = item.querySelector(".counter span");
             let c = parseInt(span.textContent) || 0;
             c++; span.textContent = c;
-            item.classList.toggle("owned",  c > 0 && !repairData[id]);
+            item.classList.toggle("owned", c > 0 && !repairData[id]);
             updateStats();
             saveCount();
         };
 
         repairBtn.onclick = () => {
-            const current = !!repairData[id];
-            const next = !current;
+            const next = !repairData[id];
             db.ref("repair/" + id).set(next ? true : null);
             repairBtn.classList.toggle("active", next);
         };
     });
 }
 </script>
-
 </body>
 </html>
