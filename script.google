@@ -1,31 +1,76 @@
-const FIREBASE_URL = "";
-const EBAY_CLIENT_ID = "";
-const EBAY_CLIENT_SECRET = "";
+const FIREBASE_URL = "?";
+const EBAY_CLIENT_ID = "?";
+const EBAY_CLIENT_SECRET = "?";
 
 const CONSOLES = {
+  // Nintendo Handhelds
+  gb:        "Nintendo Game Boy",
+  gbp:       "Nintendo Game Boy Pocket",
+  gbc:       "Nintendo Game Boy Color",
+  gba:       "Nintendo Game Boy Advance",
   gbasp:     "Game Boy Advance SP",
-  ds:        "Nintendo DS Phat",
+  ds:        "Nintendo DS",
   dsl:       "Nintendo DS Lite",
   dsi:       "Nintendo DSi",
   dsixl:     "Nintendo DSi XL",
   "3ds":     "Nintendo 3DS",
+  "3dsxl":   "Nintendo 3DS XL",
+  "2ds":     "Nintendo 2DS",
   n2dsxl:    "New Nintendo 2DS XL",
   n3ds:      "New Nintendo 3DS",
   n3dsxl:    "New Nintendo 3DS XL",
+
+  // Nintendo Heimkonsolen
+  nes:       "Nintendo NES Konsole",
+  snes:      "Super Nintendo SNES",
+  n64:       "Nintendo 64",
+  gc:        "Nintendo GameCube",
+  wii:       "Nintendo Wii",
   wiif:      "Nintendo Wii Family Edition",
+  wiim:      "Nintendo Wii Mini",
   wiiu:      "Nintendo Wii U",
   switch:    "Nintendo Switch",
-  ps2:       "PlayStation 2 Konsole",
+  switchl:   "Nintendo Switch Lite",
+  switcho:   "Nintendo Switch OLED",
+  switch2:   "Nintendo Switch 2",
+
+  // PlayStation Heimkonsolen
+  ps1:       "PlayStation 1 PS1 Konsole",
+  psone:     "PS One Konsole",
+  ps2:       "PlayStation 2 PS2 Konsole",
+  ps2s:      "PlayStation 2 Slim",
+  psx:       "PSX DESR Sony",
+  ps3f:      "PlayStation 3 Fat",
+  ps3fs:     "PlayStation 3 Fat 60GB PS2",
   ps3s:      "PlayStation 3 Slim",
   ps3ss:     "PlayStation 3 Super Slim",
+  ps4:       "PlayStation 4 PS4 Konsole",
   ps4s:      "PlayStation 4 Slim",
+  ps4p:      "PlayStation 4 Pro",
+  ps5:       "PlayStation 5 PS5 Disc",
   ps5s:      "PlayStation 5 Slim",
-  psp2:      "PSP 2000",
+  ps5p:      "PlayStation 5 Pro",
+
+  // PlayStation Handhelds
+  psp1:      "PSP 1000 ",
+  psp2:      "PSP 2000 Slim",
   psp3:      "PSP 3000",
   pspstreet: "PSP Street E1000",
-  vita2:     "PS Vita 2000",
+  pspgo:     "PSP Go",
+  vita1:     "PS Vita 1000 PCH-1000",
+  vita2:     "PS Vita 2000 PCH-2000",
+  vitatv:    "PS Vita TV PSTV",
+
+  // Xbox
+  xbox:      "Xbox Classic Konsole",
+  x360:      "Xbox 360 Phat",
+  x360s:     "Xbox 360 Slim",
+  x360e:     "Xbox 360 E",
   one:       "Xbox One Konsole",
-  seriess:   "Xbox Series S"
+  ones:      "Xbox One S",
+  onex:      "Xbox One X",
+  seriess:   "Xbox Series S",
+  seriesx:   "Xbox Series X",
 };
 
 function getEbayToken() {
