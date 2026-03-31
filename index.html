@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Konsolen-Sammlung</title>
+<title>Console Collection</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -108,35 +108,36 @@ footer { text-align:center; padding:30px; color:var(--muted); }
 <body>
 
 <header>
-<h1>Konsolen-Sammlung</h1>
+<h1>Console Collection</h1>
 
 <div class="stats">
-    <span><span class="dot-owned"></span><span id="ownedCount">0</span> / <span id="totalCount">0</span> im Besitz</span>
-    <span><span class="dot-repair"></span><span id="repairCount">0</span> zur Reparatur</span>
+    <span><span class="dot-owned"></span><span id="ownedCount">0</span> / <span id="totalCount">0</span> owned</span>
+    <span><span class="dot-repair"></span><span id="repairCount">0</span> needs repair</span>
 </div>
 
 <div class="value-box">
     <div>
-        <strong id="totalValue">—</strong> Gesamtwert (basierend auf eBay-Preisen)
+        <strong id="totalValue">—</strong> total value (based on eBay prices)
         <small id="lastUpdated"></small>
     </div>
 </div>
 
 <div class="controls">
-    <input id="search" type="text" placeholder="🔍 Konsole suchen…">
+    <input id="search" type="text" placeholder="🔍 Search console…">
     <select id="filter">
-        <option value="all">Alle</option>
-        <option value="owned">Im Besitz</option>
-        <option value="missing">Fehlend</option>
-        <option value="repair">Zur Reparatur</option>
+        <option value="all">All</option>
+        <option value="owned">Owned</option>
+        <option value="missing">Missing</option>
+        <option value="repair">Needs Repair</option>
     </select>
 </div>
 </header>
 
 <section class="grid">
-<!-- Nintendo Heimkonsolen -->
+
+<!-- Nintendo Home Consoles -->
 <div class="card">
-<h2>Nintendo – Heimkonsolen</h2>
+<h2>Nintendo – Home Consoles</h2>
 <ul>
 <li data-id="nes">NES</li>
 <li data-id="snes">SNES</li>
@@ -175,9 +176,9 @@ footer { text-align:center; padding:30px; color:var(--muted); }
 </ul>
 </div>
 
-<!-- PlayStation Heimkonsolen -->
+<!-- PlayStation Home Consoles -->
 <div class="card">
-<h2>PlayStation – Heimkonsolen</h2>
+<h2>PlayStation – Home Consoles</h2>
 <ul>
 <li data-id="ps1">PS1</li>
 <li data-id="psone">PS One</li>
@@ -232,8 +233,8 @@ footer { text-align:center; padding:30px; color:var(--muted); }
 
 <!-- Admin Login -->
 <div id="loginForm">
-<input type="email" id="email" placeholder="E-Mail (Admin)">
-<input type="password" id="password" placeholder="Passwort">
+<input type="email" id="email" placeholder="Email (Admin)">
+<input type="password" id="password" placeholder="Password">
 <button id="loginBtn">Login</button>
 </div>
 
@@ -289,7 +290,7 @@ db.ref("marketPrices").on("value", snap => {
     pricesData = snap.val() || {};
     if (pricesData._lastUpdated) {
         const d = new Date(pricesData._lastUpdated);
-        lastUpdEl.textContent = "täglich aktualisiert zwischen 3-4 UHR Stand: " + d.toLocaleDateString("de-DE"); 
+        lastUpdEl.textContent = "Updated daily between 3–4 AM · Last update: " + d.toLocaleDateString("en-GB");
     }
     renderAll();
 });
@@ -356,7 +357,7 @@ function updateStats() {
     });
     ownedEl.textContent  = owned;
     repairEl.textContent = repair;
-    totalValEl.textContent = totalValue > 0 ? "~" + totalValue.toLocaleString("de-DE") + " €" : "—";
+    totalValEl.textContent = totalValue > 0 ? "~" + totalValue.toLocaleString("en-GB") + " €" : "—";
 }
 
 function applyFilters() {
@@ -382,7 +383,7 @@ loginBtn.onclick = () => {
         loginForm.style.display = "none";
         enableEditing();
     })
-    .catch(err => alert("Fehler: " + err.message));
+    .catch(err => alert("Error: " + err.message));
 };
 
 function enableEditing() {
@@ -397,7 +398,7 @@ function enableEditing() {
 
         const repairBtn = document.createElement("button");
         repairBtn.className = "btn-repair";
-        repairBtn.title = "Zur Reparatur markieren";
+        repairBtn.title = "Mark as needs repair";
         repairBtn.textContent = "🔧";
         repairBtn.classList.toggle("active", !!repairData[id]);
         counter.appendChild(repairBtn);
