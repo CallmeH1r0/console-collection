@@ -1,6 +1,6 @@
-const FIREBASE_URL = "?";
-const EBAY_CLIENT_ID = "?";
-const EBAY_CLIENT_SECRET = "?";
+const FIREBASE_URL = "https://your-project-default-rtdb.europe-west1.firebasedatabase.app/";
+const EBAY_CLIENT_ID = "YOUR_PRODUCTION_CLIENT_ID";
+const EBAY_CLIENT_SECRET = "YOUR_PRODUCTION_CLIENT_SECRET";
 
 const CONSOLES = {
   // Nintendo Handhelds
