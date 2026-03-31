@@ -290,7 +290,7 @@ db.ref("marketPrices").on("value", snap => {
     pricesData = snap.val() || {};
     if (pricesData._lastUpdated) {
         const d = new Date(pricesData._lastUpdated);
-        lastUpdEl.textContent = "Stand: " + d.toLocaleDateString("de-DE") + <br> "täglich aktualiesiert zwischen 3-4 UHR"; </br>
+        lastUpdEl.textContent = "täglich aktualiesiert zwischen 3-4 UHR Stand: " + d.toLocaleDateString("de-DE"); 
     }
     renderAll();
 });
