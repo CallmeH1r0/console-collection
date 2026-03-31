@@ -1,139 +1,177 @@
-🎮 Console Collection Tracker
-A personal website to manage your video game console collection — with live eBay market prices, repair tracking, and automatic total value calculation.
+# 🎮 Konsolen-Sammlung
+
+Eine persönliche Website zum Verwalten deiner Spielekonsolen-Sammlung – mit Live-Marktpreisen von eBay, Reparatur-Markierungen und automatischer Gesamtwert-Berechnung.
 
 
-Features
+---
 
-✅ Track all major consoles (Nintendo, PlayStation, Xbox)
-🟢 Mark consoles as owned
-🔧 Mark consoles as needing repair
-💜 Live eBay market prices (automatically updated daily)
-💰 Automatic total collection value
-🔍 Search & filter
-🔒 Admin login to edit your collection
+## Features
 
+- ✅ Alle gängigen Konsolen verwalten (Nintendo, PlayStation, Xbox)
+- 🟢 Konsolen als „Im Besitz" markieren
+- 🔧 Konsolen als „Zur Reparatur" markieren
+- 💜 Live-Marktpreise von eBay (täglich automatisch aktualisiert)
+- 💰 Automatischer Gesamtwert deiner Sammlung
+- 🔍 Suche & Filter
+- 🔒 Admin-Login zum Bearbeiten
 
-Requirements
-All of the following are completely free:
+---
 
-GitHub account
-Firebase account
-eBay Developer account
-Google account (for Apps Script)
+## Voraussetzungen
 
+Alles komplett **kostenlos**:
 
-Step 1 – Fork the Repository
+- [GitHub](https://github.com) Konto
+- [Firebase](https://firebase.google.com) Konto
+- [eBay Developer](https://developer.ebay.com) Konto
+- [Google](https://google.com) Konto (für Apps Script)
 
-Click Fork (top right of this page)
-In your forked repo go to Settings → Pages
-Source: Deploy from a branch → Branch: main → Folder: / (root)
-Save — your site is now live at https://YOURNAME.github.io/REPONAME
+---
 
+## Schritt 1 – Repository einrichten
 
-Step 2 – Set Up Firebase
-2a. Create a project
+1. Dieses Repository **forken** (oben rechts auf „Fork" klicken)
+2. Im geforkten Repo auf **Settings → Pages** gehen
+3. Source: **Deploy from a branch** → Branch: `main` → Ordner: `/ (root)`
+4. Speichern – deine Seite ist jetzt unter `https://DEINNAME.github.io/REPONAME` erreichbar
 
-Go to console.firebase.google.com
-Click "Add project" → give it a name → Create
-In the project: Realtime Database → Create → Region: europe-west1 → Start in test mode
+---
 
-2b. Set database rules
-Under Realtime Database → Rules replace everything with:
-json{
+## Schritt 2 – Firebase einrichten
+
+### 2a. Projekt erstellen
+1. Geh auf [console.firebase.google.com](https://console.firebase.google.com)
+2. **„Projekt hinzufügen"** → Name vergeben → Erstellen
+3. Im Projekt: **Realtime Database → Erstellen** → Region: `europe-west1` → **Im Testmodus starten**
+
+### 2b. Datenbankregeln setzen
+Unter **Realtime Database → Regeln** alles ersetzen mit:
+
+```json
+{
   "rules": {
     "counts":       { ".read": true, ".write": "auth != null" },
     "repair":       { ".read": true, ".write": "auth != null" },
     "marketPrices": { ".read": true, ".write": true }
   }
 }
-Click "Publish".
-2c. Create an admin user
+```
 
-In the Firebase project: Authentication → Get started
-Enable Email/Password
-Under Users → Add user → enter your email + password
+Auf **„Veröffentlichen"** klicken.
 
-2d. Copy your Firebase config
+### 2c. Admin-Benutzer anlegen
+1. Im Firebase-Projekt: **Authentication → Jetzt loslegen**
+2. **E-Mail/Passwort** aktivieren
+3. Unter **Benutzer → Benutzer hinzufügen** → deine E-Mail + Passwort eingeben
 
-Go to Project Settings (⚙️) → General → Your apps → Add web app
-Register the app — you will receive a firebaseConfig object
+### 2d. Firebase-Config kopieren
+1. Im Projekt: **Projekteinstellungen** (⚙️) → **Allgemein → Deine Apps → Web-App hinzufügen**
+2. App registrieren → du bekommst einen `firebaseConfig`-Block
 
+---
 
-Step 3 – Update index.html
-Open index.html on GitHub (click the ✏️ pencil icon) and replace the firebaseConfig block with your own values:
-javascriptconst firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+## Schritt 3 – index.html anpassen
+
+Öffne `index.html` auf GitHub (✏️ Bleistift-Symbol) und ersetze den `firebaseConfig`-Block mit deinen eigenen Werten:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "DEIN_API_KEY",
+  authDomain: "DEIN_PROJEKT.firebaseapp.com",
+  databaseURL: "https://DEIN_PROJEKT-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "DEIN_PROJEKT",
+  storageBucket: "DEIN_PROJEKT.firebasestorage.app",
+  messagingSenderId: "DEINE_SENDER_ID",
+  appId: "DEINE_APP_ID"
 };
-Click "Commit changes".
+```
 
-Step 4 – Set Up the eBay API
-4a. Create a developer account
+**„Commit changes"** klicken.
 
-Go to developer.ebay.com → register for free
-Click "Create Application" → give your app a name
-Under My Account → Application Access click "Apply for exemption"
+---
 
-Reason: "Personal hobby project, no eBay user data is stored or processed"
-Usually approved within minutes
+## Schritt 4 – eBay API einrichten
 
+### 4a. Developer Account erstellen
+1. Geh auf [developer.ebay.com](https://developer.ebay.com) → kostenlos registrieren
+2. **„Create Application"** → App-Name vergeben
+3. Unter **My Account → Application Access** auf **„Apply for exemption"** klicken
+   - Begründung: *„Personal hobby project, no eBay user data is stored or processed"*
+   - Wird meist sofort genehmigt
+4. **Production Keys** kopieren: **App ID (Client ID)** und **Cert ID (Client Secret)**
 
-Copy your Production Keys: App ID (Client ID) and Cert ID (Client Secret)
+> ⚠️ Nur die **Production Keys** verwenden, nicht Sandbox!
 
+---
 
-⚠️ Make sure to use the Production Keys, not the Sandbox keys!
+## Schritt 5 – Google Apps Script einrichten
 
+### 5a. Script erstellen
+1. Geh auf [script.google.com](https://script.google.com) → **„Neues Projekt"**
+2. Öffne die Datei `apps-script/updatePrices.gs` aus diesem Repository
+3. Kopiere den gesamten Inhalt in den Apps Script Editor (altes löschen)
 
-Step 5 – Set Up Google Apps Script
-5a. Create the script
+### 5b. Eigene Zugangsdaten eintragen
+Ersetze ganz oben im Script die drei Platzhalter:
 
-Go to script.google.com → "New project"
-Open apps-script/updatePrices.gs from this repository
-Copy the entire content into the Apps Script editor (delete the existing code first)
+```javascript
+const FIREBASE_URL       = "https://DEIN-PROJEKT-default-rtdb.europe-west1.firebasedatabase.app";
+const EBAY_CLIENT_ID     = "DEINE_PRODUCTION_CLIENT_ID";
+const EBAY_CLIENT_SECRET = "DEIN_PRODUCTION_CLIENT_SECRET";
+```
 
-5b. Enter your credentials
-Replace the three placeholders at the very top of the script:
-javascriptconst FIREBASE_URL       = "https://YOUR-PROJECT-default-rtdb.europe-west1.firebasedatabase.app";
-const EBAY_CLIENT_ID     = "YOUR_PRODUCTION_CLIENT_ID";
-const EBAY_CLIENT_SECRET = "YOUR_PRODUCTION_CLIENT_SECRET";
-5c. Run a manual test
+### 5c. Einmal manuell testen
+- Oben `updatePrices` auswählen → **▶ Ausführen** klicken
+- Im Log sollten Preise erscheinen, z.B. `gbasp: 75`
+- In der Firebase Console unter `marketPrices/` sollten Werte erscheinen
 
-Select updatePrices from the function dropdown → click ▶ Run
-The log should show prices, e.g. gbasp: 75
-Check your Firebase Console — you should see a new marketPrices/ node with values
+### 5d. Automatischen Zeitplan einrichten
+1. In der linken Seitenleiste auf **⏰ Trigger** klicken
+2. **„+ Trigger hinzufügen"**
+3. Funktion: `updatePrices` → Zeitbasiert → **Täglich** → zwischen 03:00–04:00 Uhr
+4. Speichern
 
-5d. Set up the automatic schedule
+Die Preise werden jetzt jeden Tag automatisch aktualisiert.
 
-In the left sidebar click ⏰ Triggers
-Click "+ Add Trigger"
-Function: updatePrices → Time-based → Day timer → between 03:00–04:00
-Save
+---
 
-Prices will now update automatically every day.
+## Konsolen anpassen
 
-Customizing Consoles
-Want to add or remove consoles? Edit the <li data-id="..."> entries in index.html and add the matching IDs to the CONSOLES object in the Apps Script file.
+Möchtest du andere Konsolen hinzufügen oder entfernen? Bearbeite in `index.html` die `<li data-id="...">` Einträge und füge die entsprechenden IDs auch in der `CONSOLES`-Liste im Apps Script hinzu.
 
-Using the Admin Mode
-To edit your collection:
+---
 
-Scroll to the bottom of the website
-Enter the email and password you created in Firebase
-Click Login
-+/− buttons appear to adjust counts, and a 🔧 button to mark consoles for repair
+## Admin-Modus
 
+Um Änderungen an deiner Sammlung vorzunehmen:
 
-How It Works
-index.html              → Complete website (HTML, CSS, JS in one file)
+1. Auf der Website ganz nach unten scrollen
+2. E-Mail und Passwort eingeben (die du in Firebase angelegt hast)
+3. **Login** klicken
+4. Jetzt erscheinen **+/−** Knöpfe zum Zählen und ein **🔧** Knopf zum Markieren von Reparaturen
+
+---
+
+## Technischer Aufbau
+
+```
+index.html              → Die komplette Website (HTML, CSS, JS in einer Datei)
 apps-script/
-  updatePrices.gs       → Google Apps Script for daily eBay price fetching
-ServiceUsageCostGitHub PagesWebsite hostingFreeFirebase Realtime DatabaseStore collection & pricesFreeFirebase AuthenticationAdmin loginFreeeBay Browse APIFetch market pricesFreeGoogle Apps ScriptDaily price updatesFree
-Total: $0/month ✅
+  updatePrices.gs       → Google Apps Script für tägliche eBay-Preisabfragen
+```
 
-License
-MIT — do whatever you want with it! A ⭐ on the repo is always appreciated 😄
+| Dienst | Verwendung | Kosten |
+|---|---|---|
+| GitHub Pages | Hosting der Website | kostenlos |
+| Firebase Realtime Database | Speicherung von Sammlung & Preisen | kostenlos |
+| Firebase Authentication | Admin-Login | kostenlos |
+| eBay Browse API | Marktpreise abrufen | kostenlos |
+| Google Apps Script | Täglicher Preis-Abruf | kostenlos |
+
+**Gesamt: 0 €/Monat** ✅
+
+---
+
+## Lizenz
+
+MIT – mach damit was du willst! Ein ⭐ auf dem Repo freut mich aber 😄
